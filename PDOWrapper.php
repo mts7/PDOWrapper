@@ -150,14 +150,18 @@ class PDOWrapper {
 
     /**
      * begin makes the initial PDO database connection and returns true on success or false on failure
+     * @param string $db Database to use
      * @return boolean did the connection get established
      **/
-    public function begin() {
+    public function begin($db = '') {
         $this->_log('begin '.__FUNCTION__, 0);
 
         $connection_string = $this->_dsn.':';
         if (is_string_ne($this->_driver) && ($this->_dsn == 'ibm' || $this->_dsn == 'odbc')) {
             $connection_string .= 'driver='.$this->_driver.';';
+        }
+        if (is_string_ne($db)) {
+            $this->database($db);
         }
         $connection_string .= 'host='.$this->_server.';dbname='.$this->_db;
         $this->_log(__FUNCTION__.': '.$connection_string, 1);
