@@ -29,68 +29,68 @@ define('SEP', ' | ');
  * @todo Create a generate PHP code class for different variable types and use this function in it.
  */
 function generate_code_from_array($array = array(), $depth = 0, $var = '') {
-	if (!is_array_ne($array)) {
-		return '';
-	}
+    if (!is_array_ne($array)) {
+        return '';
+    }
 
-	$boolean_words = array('true', 'false');
+    $boolean_words = array('true', 'false');
 
-	$lines = '';
-	if ($depth === 0) {
-		$lines .= $var . ' = array(' . PHP_EOL;
-	}
+    $lines = '';
+    if ($depth === 0) {
+        $lines .= $var . ' = array(' . PHP_EOL;
+    }
 
-	$depth += 1;
-	foreach($array as $key => $value) {
-		$lines .= str_repeat("\t", $depth);
-		if (!is_this_int($key)) {
-			if (is_bool($key)) {
-				$lines .= $key == true ? "'true'" : "'false'" .' => ';
-			}
-			else if (is_null($key)) {
-				$lines .= "'' => ";
-			}
-			else if (is_array($key) || is_object($key)) {
-				continue;
-			}
-			else {
-				$lines .= "'$key' => ";
-			}
-		}
-		if (is_array($value)) {
-			$lines .= 'array(';
-			if (!empty($value)) {
-				$lines .= PHP_EOL;
-				$lines .= generate_code_from_array($value, $depth);
-				$lines .= str_repeat("\t", $depth);
-			}
-			$lines .= ')';
-		}
-		else if (is_string($value)) {
-			if (in_array($value, $boolean_words)) {
-				$lines .= $value;
-			}
-			else {
-				$lines .= "'$value'";
-			}
-		}
-		else if (is_numeric($value)) {
-			$lines .= $value;
-		}
-		else {
-			// TODO: figure out which other types might need to be represented here
-			$lines .= "''";
-			continue;
-		}
-		$lines .= ','.PHP_EOL;
-	}
-	$depth -= 1;
+    $depth += 1;
+    foreach($array as $key => $value) {
+        $lines .= str_repeat("\t", $depth);
+        if (!is_this_int($key)) {
+            if (is_bool($key)) {
+                $lines .= $key == true ? "'true'" : "'false'" .' => ';
+            }
+            else if (is_null($key)) {
+                $lines .= "'' => ";
+            }
+            else if (is_array($key) || is_object($key)) {
+                continue;
+            }
+            else {
+                $lines .= "'$key' => ";
+            }
+        }
+        if (is_array($value)) {
+            $lines .= 'array(';
+            if (!empty($value)) {
+                $lines .= PHP_EOL;
+                $lines .= generate_code_from_array($value, $depth);
+                $lines .= str_repeat("\t", $depth);
+            }
+            $lines .= ')';
+        }
+        else if (is_string($value)) {
+            if (in_array($value, $boolean_words)) {
+                $lines .= $value;
+            }
+            else {
+                $lines .= "'$value'";
+            }
+        }
+        else if (is_numeric($value)) {
+            $lines .= $value;
+        }
+        else {
+            // TODO: figure out which other types might need to be represented here
+            $lines .= "''";
+            continue;
+        }
+        $lines .= ','.PHP_EOL;
+    }
+    $depth -= 1;
 
-	if ($depth === 0) {
-		$lines .= ');';
-	}
+    if ($depth === 0) {
+        $lines .= ');';
+    }
 
-	return $lines;
+    return $lines;
 }
 
 
@@ -183,20 +183,20 @@ function is_this_int($int) {
  * @return string
  */
 function output_to_string($var) {
-	ob_start();
-	if (is_array($var)) {
-		print_r($var);
-	}
-	else if (is_bool($var)) {
-		echo $var ? 'true' : 'false';
-	}
-	else if (is_string($var) || is_numeric($var)) {
-		echo $var;
-	}
-	else {
-		var_dump($var);
-	}
-	$str = ob_get_clean();
+    ob_start();
+    if (is_array($var)) {
+        print_r($var);
+    }
+    else if (is_bool($var)) {
+        echo $var ? 'true' : 'false';
+    }
+    else if (is_string($var) || is_numeric($var)) {
+        echo $var;
+    }
+    else {
+        var_dump($var);
+    }
+    $str = ob_get_clean();
 
-	return $str;
+    return $str;
 }
